@@ -1,0 +1,26 @@
+{% macro appHeader(activeRoute) %}
+{% set items = [
+    { route: 'cases/index', text: 'Cases' },
+    { route: 'blog/index', text: 'Blog' }
+] %}
+<style>{% include "./app-header.css" %}</style>
+<header class="app-header">
+    <a href="{{ route('index') }}">
+        My site
+    </a>
+    <nav>
+        <ul>
+        {% for item in items %}
+            <li class="{{ className({
+                'app-header__item': true,
+                'app-header__item--active': item.route === activeRoute
+            }) }}">
+                <a href="{{ route(item.route) }}">
+                    {{ item.text }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </nav>
+</header>
+{% endmacro %}

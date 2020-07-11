@@ -1,0 +1,14 @@
+[build]
+  command = "npm run functions:install && npm run build"
+  publish = "dist/"
+  functions = "src/server/functions/"
+  [build.processing]
+    skip_processing = true
+
+[dev]
+  publish = "dist/"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/render-html"
+  status = 200

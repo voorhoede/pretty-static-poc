@@ -1,0 +1,14 @@
+{% from "components/app-header/app-header.njk" import appHeader %}
+<html>
+<head>
+    <title>Pretty Static</title>
+</head>
+<body>
+    {{ appHeader(activeRoute = _route.name) }}
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+    {# @todo: conditionally load debug, based on node env #}
+    {% include "components/debug/debug.njk" %}
+</body>
+</html>

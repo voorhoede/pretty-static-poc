@@ -1,0 +1,10 @@
+{% extends "layouts/default.njk" %}
+
+{% block main %}
+    <h1>Cases</h1>
+    {% for item in items %}
+    <a href="{{ route('cases/_slug', { slug: item.slug }) }}">
+        <h2>{{ item.title }}</h2>
+    </a>
+    {% endfor %}
+{% endblock %}

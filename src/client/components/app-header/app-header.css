@@ -1,0 +1,12 @@
+.app-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.app-header__item {
+    display: inline-block;
+    margin-right: 1em;
+}
+.app-header__item--active {
+    font-weight: bold;
+}

@@ -1,0 +1,8 @@
+query ($slug: String) {
+  blogPost(locale: en, filter: {slug: {eq: $slug}}) {
+    title
+    authors {
+      name
+    }
+  }
+}

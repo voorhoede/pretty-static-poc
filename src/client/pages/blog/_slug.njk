@@ -1,0 +1,8 @@
+{% extends "layouts/default.njk" %}
+
+{% block main %}
+    <h1>{{ blogPost.title }}</h1>
+    {% for author in blogPost.authors %}
+      {{ author.name }}
+    {% endfor %}
+{% endblock %}

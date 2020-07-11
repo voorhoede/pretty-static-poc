@@ -1,0 +1,12 @@
+{
+    "name": "lib",
+    "version": "1.0.0",
+    "description": "",
+    "license": "MIT",
+    "dependencies": {
+        "fast-glob": "^3.2.4",
+        "node-fetch": "^2.6.0",
+        "nunjucks": "^3.2.1",
+        "route-parser": "^0.0.5"
+    }
+}
