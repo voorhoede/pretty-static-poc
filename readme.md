@@ -18,10 +18,10 @@ Lightweight serverless web app setup in Nuxt/Next/Sapper style sans single page 
 ## Structure
 
 ```
-src/
-  client/
+src/          <- web app source code
+  client/     <- templates and other files sent to the browser
   lib/        <- shared between client & server
-  server/
+  server/     <- server config & serverless functions
 ```
 
 ## The client
@@ -35,6 +35,12 @@ src/client/
   static/           <- will be served as-is
 ```
 
+### Routing
+
+
+### Async data
+
+
 ### Templates
 
 ```
@@ -44,10 +50,10 @@ src/client/
       my-component.njk
       (my-component.fragment.graphql)
   pages/
-    my-page/
-      my-page.njk
-      my-page.query.graphql
-      (my-page.data.js)
+    my-dir/
+      _my-page.njk
+      _my-page.query.graphql
+      (_my-page.data.js)
     404.njk
 ```
 
@@ -99,7 +105,14 @@ outputs:
 {{ isExactRoute(...) }}
 ```
 
+Within a template, the current route is available via `_route`.
+During development `_route` is always logged to the console.
+
 ## The server
 
 ```
 ```
+
+Netlify unbundled JavaScript functions
+
+Server `lib`
