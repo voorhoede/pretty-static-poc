@@ -7,13 +7,23 @@ const env = new nunjucks.Environment(
     new nunjucks.FileSystemLoader(clientDir),
     { noCache: true },
 );
-// @todo configure env using nunjucks.config.js in project root
+const defaultState = () => ({
+    firstTimers: [],
+});
+let state = defaultState();
 
+// @todo configure env using nunjucks.config.js in project root
 env.addGlobal('className', stringifyProps);
 env.addGlobal('stringifyProps', stringifyProps);
 env.addGlobal('route', (name, params) => reverseRoute({ name, params }));
+env.addGlobal('isFirstTime', (key) => {
+    if (state.firstTimers.includes(key)) return false;
+    state.firstTimers.push(key);
+    return true;
+})
 
 function render(filename, data) {
+    state = defaultState();
     return env.render(`pages/${filename}${templateExt}`, data);
 }
 

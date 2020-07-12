@@ -3,7 +3,9 @@
     { route: 'cases/index', text: 'Cases' },
     { route: 'blog/index', text: 'Blog' }
 ] %}
-<style>{% include "./app-header.css" %}</style>
+{% if isFirstTime('app-header.css') %}
+    <style>{% include "./app-header.css" %}</style>
+{% endif %}
 <header class="app-header">
     <a href="{{ route('index') }}">
         My site

@@ -2,4 +2,9 @@
 
 {% block main %}
     <h1>Blog</h1>
+    {% for item in items %}
+    <a href="{{ route('blog/_slug', { slug: item.slug }) }}">
+        <h2>{{ item.title }}</h2>
+    </a>
+    {% endfor %}
 {% endblock %}
