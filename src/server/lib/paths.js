@@ -1,6 +1,6 @@
 const path = require('path');
 
-const clientDir = path.join(__dirname, '../../client/');
+const clientDir = path.dirname(require.resolve('client/package.json'));
 const pagesDir = path.join(clientDir, 'pages/');
 
 module.exports = {

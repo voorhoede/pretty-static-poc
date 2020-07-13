@@ -4,9 +4,13 @@
     "description": "",
     "license": "MIT",
     "dependencies": {
+        "client": "file:../../client",
         "fast-glob": "^3.2.4",
         "node-fetch": "^2.6.0",
         "nunjucks": "^3.2.1",
         "route-parser": "^0.0.5"
+    },
+    "devDependencies": {
+        "chokidar": "^3.4.0"
     }
 }
