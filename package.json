@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist/",
     "build": "NODE_ENV=production run-s build:*",
     "build:html": "node scripts/build-html.js",
-    "build:static": "cp -r src/client/static/ dist/",
+    "build:static": "cp -r src/server/functions/render-html/client/static/ dist/",
     "predev": "run-s prebuild build:static",
     "dev": "run-p start watch",
     "functions:install": "npm-recursive-install --rootDir=src/server --production",
