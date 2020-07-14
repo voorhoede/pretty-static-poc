@@ -17,7 +17,8 @@ require('dotenv').config();
 const pageNotFound = () => ({
     statusCode: 404,
     headers: { 'content-type': 'text/html' },
-    body: render(`404`, { _data: {}, _route: {} }),
+    // body: render(`404`, { _data: {}, _route: {} }),
+    body: 'uh oh 404',
 });
 
 const handler = async (event) => {
