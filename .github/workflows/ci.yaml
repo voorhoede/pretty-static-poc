@@ -6,6 +6,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: echo ${{ github.base_ref }}
 
     - uses: actions/setup-node@v2-beta
       with:
