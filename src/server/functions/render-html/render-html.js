@@ -21,7 +21,6 @@ const pageNotFound = () => ({
 });
 
 const handler = async (event) => {
-    console.log({ event })
     const route = await matchRoute(event.path);
     console.log({ route })
     if (!route) return pageNotFound();
