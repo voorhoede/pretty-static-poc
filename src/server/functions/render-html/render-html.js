@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const mime = require('mime-types');
 const middy = require('@middy/core');
 const httpErrorHandler = require('@middy/http-error-handler');
 const httpEventNormalizer = require('@middy/http-event-normalizer');
@@ -17,13 +18,16 @@ require('dotenv').config();
 const pageNotFound = () => ({
     statusCode: 404,
     headers: { 'content-type': 'text/html' },
-    body: render(`404`, { _data: {}, _route: {} }),
+    body: '404' //render(`404`, { _data: {}, _route: {} }),
 });
 
 const handler = async (event) => {
-    const route = await matchRoute(event.path);
+    const route = {
+        ...await matchRoute(event.path),
+        host: event.headers.host,
+    };
     console.log({ route })
-    if (!route) return pageNotFound();
+    if (!route.isMatch) return pageNotFound();
 
     const graphlFilename = path.join(pagesDir, `${route.name}${graphqlQueryExt}`);
     const hasDataFile = await fs.pathExists(graphlFilename);
@@ -41,11 +45,12 @@ const handler = async (event) => {
         }
     }
 
+    const contentType = mime.lookup(route.urlPath) || 'text/html';
     const html = render(route.name, { ...data, _data: data, _route: route });
 
     return {
         statusCode: 200,
-        headers: { 'content-type': 'text/html' },
+        headers: { 'content-type': contentType },
         body: html,
     };
 };

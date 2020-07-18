@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>/</loc>
+  </url>
+  {%- for item in cases %}
+  <url>
+    <loc>{{ route('cases/_slug', { slug: item.slug }) }}</loc>
+  </url>
+  {%- endfor %}
+  {%- for item in posts %}
+  <url>
+    <loc>{{ route('blog/_slug', { slug: item.slug }) }}</loc>
+  </url>
+  {%- endfor %}
+</urlset>

@@ -11,6 +11,7 @@
         "@middy/http-security-headers": "^1.0.0",
         "@middy/validator": "^1.0.0",
         "fs-extra": "^9.0.1",
-        "lib": "file:../../lib"
+        "lib": "file:../../lib",
+        "mime-types": "^2.1.27"
     }
 }
