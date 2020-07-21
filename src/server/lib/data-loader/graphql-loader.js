@@ -1,14 +1,13 @@
-/**
- * @todo: move to src/lib and use isomorphic-unfetch? 
- *        how to keep token private? netlify proxy or function?
- */
-
+const fs = require('fs').promises;
 const fetch = require('node-fetch');
 
 require('dotenv').config();
 
-function fetchData({ query, variables }) {
-    return fetch('https://graphql.datocms.com/', {
+module.exports = async function({ filename, params }) {
+    const query = await fs.readFile(filename, 'utf8');
+    const variables = params;
+
+    const data = await fetch('https://graphql.datocms.com/', {
         method: 'post',
         headers: {
             'Content-Type': 'application/json',
@@ -21,6 +20,9 @@ function fetchData({ query, variables }) {
         if (response.errors) throw Error(JSON.stringify(response, null, 4));
         return response.data;
     });
-};
 
-module.exports = fetchData;
+    const hasData = Object.values(data).some(value => !!value);
+    if (!hasData) throw Error('No data');
+
+    return data;
+};

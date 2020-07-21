@@ -1,4 +1,3 @@
-const mime = require('mime-types');
 const middy = require('@middy/core');
 const httpErrorHandler = require('@middy/http-error-handler');
 const httpEventNormalizer = require('@middy/http-event-normalizer');
@@ -6,45 +5,42 @@ const httpSecurityHeaders = require('@middy/http-security-headers');
 const validator = require('@middy/validator');
 
 const { loadData } = require('lib/data-loader');
-const { render } = require('lib/renderer');
 const { matchRoute } = require('lib/router');
 const { inputSchema, outputSchema } = require('./schema');
 
 require('dotenv').config();
 
 const isProduction = (process.env.NODE_ENV === 'production');
-const pageNotFound = () => ({
+const jsonResponse = ({ body, statusCode = 200 }) => ({
+    statusCode,
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ ...body, statusCode }),
+});
+const pageNotFound = () => jsonResponse({
     statusCode: 404,
-    headers: { 'content-type': 'text/html' },
-    //body: render(`404`, { _data: {}, _route: {} }),
-    body: '404',
+    body: { message: 'Page not found' },
 });
-const serverError = (error) => ({
+const serverError = (error) => jsonResponse({
     statusCode: 500,
-    headers: { 'content-type': 'text/html' },
-    body: isProduction
-        ? 'Server Error (500)'
-        : `<h1>Server Error (500)</h1><pre><code>${JSON.stringify({ statusCode: 500, error }, null, 2)}</code></pre>`,
+    body: {
+        error: isProduction ? error : 'Server error',
+    },
 });
+const urlPrefix = '/api/data/'; // must match redirect rule in `netlify.toml`
 
 const handler = async (event) => {
+    const urlPath = event.path.substr(urlPrefix.length -1);
     const route = {
-        ...await matchRoute(event.path),
-        queryParams: event.queryStringParameters,
-        host: event.headers.host,
+        ...await matchRoute(urlPath),
+        queryParams: event.queryStringParameters
     };
-    // console.log({ route })
     if (!route.isMatch) return pageNotFound();
 
     try {
         const data = await loadData({ route });
-        const html = render(route.name, { ...data, _data: data, _route: route });
-        const contentType = mime.lookup(route.urlPath) || 'text/html';
-        return {
-            statusCode: 200,
-            headers: { 'content-type': contentType },
-            body: html,
-        };
+        return jsonResponse({
+            body: { data },
+        });
     } catch(error) {
         console.error(error);
         return serverError(error.toString());

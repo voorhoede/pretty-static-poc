@@ -1,0 +1,30 @@
+{% extends "layouts/default.njk" %}
+
+{% set query = _route.queryParams.query %}
+
+{% block main %}
+    <h1>Search ({{ locale }})</h1>
+
+    <form action="{{ route('_locale/search', { locale: _route.params.locale }) }}" method="get">
+        <label for="search-input">search for</label>
+        <input id="search-input" type="search" name="query" value="{{ query }}">
+    </form>
+
+    {% if query %}
+    <h2>Results</h2>
+    <p>Found <strong>{{ count }} result(s)</strong> in total.</p>
+
+    <ol>
+        {% for item in results %}
+        <li>
+            <a href="{{ item.urlPath }}">
+                <h3>{{ item.title }}</h3>
+                {% for text in item.highlight.body %}
+                <p>... {{ text | replace('[h]', '<mark>') | replace('[/h]', '</mark>') | safe }} ...</p>
+                {% endfor %}
+            </a>
+        </li>
+        {% endfor %}
+    </ol>
+    {% endif %}
+{% endblock %}

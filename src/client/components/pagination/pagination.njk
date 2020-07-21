@@ -1,0 +1,11 @@
+{% macro pagination(routeName) %}
+<nav class="pagination">
+    <ul>
+        {% for page in range(1, 12) %}
+        <li>
+            <a href="{{ route('blog/index') }}?offset={{ (page-1)*5 }}&limit=5">{{ page }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endmacro %}

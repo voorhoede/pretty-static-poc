@@ -7,5 +7,5 @@ module.exports = {
     clientDir,
     pagesDir,
     templateExt: '.njk',
-    graphqlQueryExt: '.query.graphql',
+    graphqlQueryExt: '.data.graphql',
 }

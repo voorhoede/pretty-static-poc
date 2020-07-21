@@ -1,6 +1,0 @@
-query {
-  items: allBlogPosts(first: "100", orderBy: publishDate_DESC) {
-    slug
-    title
-  }
-}

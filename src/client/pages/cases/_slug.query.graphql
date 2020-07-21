@@ -1,6 +1,0 @@
-query ($slug: String) {
-  item: caseItem(filter: {slug: {eq: $slug}}) {
-    title
-    subtitle
-  }
-}

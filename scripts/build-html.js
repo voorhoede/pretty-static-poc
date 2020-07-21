@@ -7,8 +7,8 @@ const log = message => console.log(message);
 
 const routes = [
     { name: 'index' },
-    { name: 'cases/index' },
-    { name: 'cases/_slug', params: { slug: 'quantum-inspire' }},
+    { name: '_locale/cases/index', params: { locale: 'en' } },
+    { name: '_locale/cases/_slug', params: { locale: 'en', slug: 'quantum-inspire' } },
 ];
 
 // hat tip: https://css-tricks.com/why-using-reduce-to-sequentially-resolve-promises-works/

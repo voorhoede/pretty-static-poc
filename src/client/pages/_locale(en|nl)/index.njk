@@ -1,0 +1,6 @@
+{% extends "layouts/default.njk" %}
+{% set locale = _route.params.locale %}
+
+{% block main %}
+    <h1>{{ _data[locale].title }} ({{ locale }})</h1>
+{% endblock %}

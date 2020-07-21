@@ -1,6 +1,10 @@
 {% from "components/app-header/app-header.njk" import appHeader %}
-<html>
+{% set locale = _route.params.locale | default('en') %}
+<!doctype html>
+<html lang="{{ locale }}">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pretty Static</title>
 </head>
 <body>

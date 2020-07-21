@@ -1,0 +1,6 @@
+query ($locale: SiteLocale, $slug: String) {
+  item: caseItem(locale: $locale, filter: {slug: {eq: $slug}}) {
+    title
+    subtitle
+  }
+}

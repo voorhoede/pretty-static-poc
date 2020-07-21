@@ -8,6 +8,19 @@
 [dev]
   publish = "dist/"
 
+[[headers]]
+    for = "/*"
+    [headers.values]
+        X-Frame-Options = "DENY"
+        X-XSS-Protection = "1; mode=block"
+        X-Content-Type-Options = "nosniff"
+        Referrer-Policy= "no-referrer-when-downgrade"
+
+[[redirects]]
+  from = "/api/data/*"
+  to = "/.netlify/functions/load-data"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/render-html"

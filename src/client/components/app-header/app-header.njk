@@ -1,13 +1,18 @@
 {% macro appHeader(activeRoute) %}
 {% set items = [
-    { route: 'cases/index', text: 'Cases' },
-    { route: 'blog/index', text: 'Blog' }
+    { route: '_locale/cases/index', text: 'Cases' },
+    { route: 'blog/index', text: 'Blog' },
+    { route: '_locale/search', text: 'Search' }
 ] %}
 {% if isFirstTime('app-header.css') %}
     <style>{% include "./app-header.css" %}</style>
 {% endif %}
 <header class="app-header">
     <a href="{{ route('index') }}">
+        <img alt="" 
+            src="{{ assetUrl('logo.png') }}" 
+            style="height:2em; vertical-align:middle;" 
+        >
         My site
     </a>
     <nav>
@@ -17,7 +22,7 @@
                 'app-header__item': true,
                 'app-header__item--active': item.route === activeRoute
             }) }}">
-                <a href="{{ route(item.route) }}">
+                <a href="{{ route(item.route, { locale: 'en' }) }}">
                     {{ item.text }}
                 </a>
             </li>

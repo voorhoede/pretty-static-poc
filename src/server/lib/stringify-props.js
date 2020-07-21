@@ -1,3 +1,5 @@
+// @todo replace by https://github.com/JedWatson/classnames ?
+
 const isObject = obj => typeof obj === 'object';
 
 const stringifyPropsArray = arr => arr

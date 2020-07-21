@@ -1,6 +1,0 @@
-query {
-  items: allCaseItems(locale: en) {
-    title
-    slug
-  }
-}

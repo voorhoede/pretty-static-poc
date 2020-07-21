@@ -5,7 +5,7 @@
   </url>
   {%- for item in cases %}
   <url>
-    <loc>{{ route('cases/_slug', { slug: item.slug }) }}</loc>
+    <loc>{{ route('_locale/cases/_slug', { locale: 'en', slug: item.slug }) }}</loc>
   </url>
   {%- endfor %}
   {%- for item in posts %}

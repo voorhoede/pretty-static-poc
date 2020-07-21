@@ -3,7 +3,7 @@
 {% block main %}
     <h1>Cases</h1>
     {% for item in items %}
-    <a href="{{ route('cases/_slug', { slug: item.slug }) }}">
+    <a href="{{ route('_locale/cases/_slug', { locale: _route.params.locale, slug: item.slug }) }}">
         <h2>{{ item.title }}</h2>
     </a>
     {% endfor %}

@@ -1,0 +1,6 @@
+query ($locale: SiteLocale) {
+  items: allCaseItems(locale: $locale) {
+    title
+    slug
+  }
+}

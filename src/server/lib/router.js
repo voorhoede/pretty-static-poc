@@ -11,12 +11,24 @@ function isIndexRoute(name) {
     return `/${name}`.endsWith('/index');
 }
 
+function getParamPatterns(name) {
+    const paramWithPattern = /^_(.*)\((.*)\)$/
+    return name.split('/')
+        .filter(part => paramWithPattern.test(part))
+        .map(part => {
+            const [match, name, pattern] = paramWithPattern.exec(part);
+            return { name, pattern };
+        })
+        .reduce((out, { name, pattern }) => ({ ...out, [name]: pattern }), {});
+}
+
 function getPattern(name) {
-    const isIndex = isIndexRoute(name);
+    const cleanName = name.replace(/\(.*\)/g, '');          // remove param patterns
+    const isIndex = isIndexRoute(cleanName);
     const basePattern = isIndex
-        ? `/${name}`.replace(/\/index$/, '(/)(index)')  // optional /index
-        : `/${name}`.concat('(/)');                     // optional trailing slash
-    return basePattern.replace(/\/_/gi, '/:');          // transform /:param notation
+        ? `/${cleanName}`.replace(/\/index$/, '(/)(index)') // optional /index
+        : `/${cleanName}`.concat('(/)');                    // optional trailing slash
+    return basePattern.replace(/\/_/gi, '/:');              // transform /:param notation
 }
 
 async function getRoutes() {
@@ -26,9 +38,18 @@ async function getRoutes() {
             name,
             isIndex: isIndexRoute(name),
             pattern: getPattern(name),
+            paramPatterns: getParamPatterns(name),
         }))
-        // @todo: order by specificity, and indix routes before param route
+        // @todo: order by specificity, and index routes before param route
         .sort((a, b) => (b.isIndex - a.isIndex));
+}
+
+function matchParams({ params, patterns }) {
+    return Object.keys(patterns).every(paramName => {
+        const pattern = new RegExp(`^${patterns[paramName]}$`);
+        const value = params[paramName];
+        return pattern.test(value);
+    });
 }
 
 async function matchRoute(urlPath) {
@@ -36,10 +57,11 @@ async function matchRoute(urlPath) {
     return routes
         .map(route => {
             const output = (new Route(route.pattern)).match(urlPath);
+            const isMatch = output && matchParams({ params: output, patterns: route.paramPatterns });
             return {
                 ...route,
                 urlPath,
-                isMatch: !!output,
+                isMatch,
                 params: output ? output : {}
             }
         })
