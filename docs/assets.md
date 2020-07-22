@@ -1,6 +1,6 @@
 # Assets
 
 - [ ] Asset optimisation
-- [ ] Asset versioning
+- [ ] Asset revisioning/versioning
 - [ ] Asset caching
 - [ ] Hot/Live reloading during development (BrowserSync?)

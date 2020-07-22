@@ -29,15 +29,17 @@ const serverError = (error) => jsonResponse({
 const urlPrefix = '/api/data/'; // must match redirect rule in `netlify.toml`
 
 const handler = async (event) => {
-    const urlPath = event.path.substr(urlPrefix.length -1);
-    const route = {
-        ...await matchRoute(urlPath),
-        queryParams: event.queryStringParameters
-    };
-    if (!route.isMatch) return pageNotFound();
-
     try {
-        const data = await loadData({ route });
+        const urlPath = event.path
+            .substr(urlPrefix.length -1)
+            .replace(/\.json$/, '');
+        const route = await matchRoute({
+            urlPath,
+            queryParams: event.queryStringParameters,
+        });
+        if (!route.isMatch) return pageNotFound();
+
+        const data = await loadData({ route }) || {};
         return jsonResponse({
             body: { data },
         });

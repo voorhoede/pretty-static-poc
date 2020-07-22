@@ -18,6 +18,7 @@ function asyncSequence(arr, asyncMethod) {
     }, Promise.resolve());
 }
 
+// @todo: throw error if response.status != 200
 function renderAndSave({ name, params }) {
     const urlPath = reverseRoute({ name, params });
     const outputFilename = path.join(__dirname, '../dist', urlPath, 'index.html');
@@ -30,6 +31,6 @@ function renderAndSave({ name, params }) {
         .then(() => log(`✓ Generated ${urlPath}`));
 }
 
-log(`\nⓘ Generating pages\n`);
+log(`\nⓘ Generating static pages\n`);
 asyncSequence(routes, renderAndSave)
-    .then(() => log(`\nⓘ Generated ${routes.length} pages\n`));
+    .then(() => log(`\nⓘ Generated ${routes.length} static pages\n`));

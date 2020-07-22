@@ -1,8 +1,11 @@
 # Pretty Static
 
-**Pretty Static is a lightweight serverless web app framework optimised for mostly static sites, with ...**
+**Pretty Static is a lightweight serverless web app framework optimised for mostly static sites,**
+**with optional dynamic serverless rendering and data loading.**
 
-Lightweight serverless web app setup in Next/Nuxt/Sapper style sans single page app framework.
+Pretty Static draws inspiration from other web app frameworks like Next.js, Nuxt.js, Sapper and Eleventy.
+The setup is similar but without a JavaScript or Single Page App framework. That makes it ideal for mostly static sites.
+You can generate fully static sites. And ig you need dynamic rendering and data loading, Pretty offers this using serverless functions.
 
 ## Features
 
@@ -41,6 +44,6 @@ src/client/
   assets/           <- will be optimised + hash in filename
   components/       <-
   layouts/          <-
-  pages/            <-
+  routes/            <-
   static/           <- will be served as-is
 ```

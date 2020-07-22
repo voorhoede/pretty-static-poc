@@ -5,25 +5,23 @@ const glob = require('fast-glob');
 const path = require('path');
 const revisionHash = require('rev-hash');
 
-const assetsDir = path.join(__dirname, '../dist/assets/');
-const assetsFile = filename => path.join(assetsDir, filename);
-const revPattern = /.*\.[0-9a-f]{10}\..*/
-const revManifestFilename = 'rev-manifest.json';
+const rootDir = path.join(__dirname, '../');
+const inputDir = path.join(rootDir, 'dist/assets/');
+const outputDir = path.join(rootDir, 'dist/_pretty/assets/');
+// const revPattern = /.*\.[0-9a-f]{10}\..*/
+const revManifestFilename = path.join(rootDir, 'dist/_pretty/rev-manifest.json');
 
 async function getFilenames() {
-    const filenames = await glob(`**/*`, { cwd: assetsDir });
-    return filenames
-        .filter(filename => !revPattern.test(filename))
-        .filter(filename => filename !== revManifestFilename);
+    return glob(`**/*`, { cwd: inputDir });
 }
 
 async function revisionAsset(filename) {
-    const contents = await fse.readFile(assetsFile(filename), 'utf8');
+    const contents = await fse.readFile(path.join(inputDir, filename), 'utf8');
     const hash = revisionHash(contents);
     const extension = path.extname(filename);
     const revisedFilename = filename.replace(new RegExp(`${extension}$`), `.${hash}${extension}`);
-    await fse.copyFile(assetsFile(filename), assetsFile(revisedFilename));
-    console.log(`✓ ${filename} → ${revisedFilename}`);
+    await fse.copyFile(path.join(inputDir, filename), path.join(outputDir, revisedFilename));
+    console.log(`✓ Copied ${filename} → ${revisedFilename}`);
     return { filename, revisedFilename };
 }
 
@@ -32,12 +30,13 @@ async function saveRevManifest(revisions) {
         ...out, 
         [filename]: revisedFilename
     }), {});
-    await fse.outputJson(assetsFile(revManifestFilename), revManifest, { spaces: 2 });
-    console.log(`✓ Saved ${revManifestFilename}`);
+    await fse.outputJson(revManifestFilename, revManifest, { spaces: 2 });
+    console.log(`✓ Saved ${path.relative(rootDir, revManifestFilename)}`);
     return revManifest;
 }
 
 async function revisionAssets() {
+    await fse.ensureDir(outputDir);
     const filenames = await getFilenames();
     const revisions = await Promise.all(filenames.map(revisionAsset));
     return saveRevManifest(revisions);

@@ -6,7 +6,8 @@
 - [x] Route URL helper
 - [x] Asset URL helper
 - [x] Class name helper
-- [ ] 
+- [ ] Format date helper
+- [ ] Load data helper
 - [ ] Minification
 - [ ] Compression
 - [ ] Rendering in service worker
@@ -16,7 +17,7 @@
 
 ## Nunjucks templating language
 
-This framework uses [Nunjucks](https://mozilla.github.io/nunjucks/) for its templates.
+Pretty Static uses [Nunjucks](https://mozilla.github.io/nunjucks/) for its templates.
 
 Templates use the community adopted [`.njk` extension](https://mozilla.github.io/nunjucks/templating.html#file-extensions).
 
@@ -28,7 +29,7 @@ src/client/
     my-component/
       my-component.njk
       (my-component.fragment.graphql)
-  pages/
+  routes/
     my-dir/
       _my-page.njk
       _my-page.data.graphql

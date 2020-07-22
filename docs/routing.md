@@ -5,7 +5,7 @@
 - [x] File based router
 - [x] Static routes
 - [x] Dynamic routes
-- [ ] Query parameters
+- [x] Query parameters
 - [x] Route expressions
 - [ ] Splat / wildcard routes (`_*.njk`)
 - [x] Custom file extensions (`*.xml.njk`)
@@ -17,24 +17,29 @@
 
 ## File based router
 
-The framework has a file-system based router, inspired by [Next.js](https://nextjs.org/docs/routing/introduction), [Nuxt.js](https://nuxtjs.org/guide/routing/) and [Sapper](https://sapper.svelte.dev/docs#Routing).
-When a file is added to the pages directory (`src/client/pages/`) it's automatically available as a route.
+Pretty Static has a file-system based router, inspired by [Next.js](https://nextjs.org/docs/routing/introduction), [Nuxt.js](https://nuxtjs.org/guide/routing/) and [Sapper](https://sapper.svelte.dev/docs#Routing).
+
+When a file is added to the routes directory (`src/client/routes/`) it's automatically available as a route. Route files can be used for both template and data routes:
+
+* Template routes (`[name](.ext).njk`) are for HTML pages and other rendered files.
+* Data routes (`[name].data.[ext]` expose data in templates and as via an API endpoint.
+
 
 ### Static routes
 
 The router supports static routes where each template file matches exactly one website URL.
 The router supports nested routes and automatically routes files named `index` to the root of the directory:
 
-- `pages/index.njk` → `/`
-- `pages/about.njk` → `/about/`
-- `pages/about/index.njk` → `/about/`
-- `pages/blog/index.njk` → `/blog/`
+- `routes/index.njk` → `/`
+- `routes/about.njk` → `/about/`
+- `routes/about/index.njk` → `/about/`
+- `routes/blog/index.njk` → `/blog/`
 
 ### Dynamic routes
 
 The router supports dynamic routes containing path parameters, using the `_param` syntax:
 
-- `pages/_locale/blog/_slug.njk` → `/:locale/blog/:slug`
+- `routes/_locale/blog/_slug.njk` → `/:locale/blog/:slug`
 
 These parameters will be available in your [data loader](/docs/data.md).
 For example `/en/blog/my-article/` exposes `{ locale: "en", slug: "my-article" }`.
@@ -49,8 +54,8 @@ Note that path parameters with the same name override query parameters.
 
 The router supports refining a route using regular expressions, using the `_param(regex)` syntax:
 
-- `pages/blog/_slug([a-z-]+).njk`
-- `pages/_locale(en|nl)/blog/_slug([a-z-]+).njk`
+- `routes/blog/_slug([a-z-]+).njk`
+- `routes/_locale(en|nl)/blog/_slug([a-z-]+).njk`
 
 Because of technical limitations, the following characters cannot be used: `/`, `\`, `?`, `:`, `(` and `)`.
 
@@ -62,8 +67,8 @@ The server responds with a `content-type` based on the route name.
 By default the server responds with `text/html`.
 When you add a file extension (like `.xml`) the server reponds with the related content type:
 
-- `pages/sitemap.njk` → `/sitemap` with response header `content-type: text/html`
-- `pages/sitemap.xml.njk` → `/sitemap.xml` with response header `content-type: application/xml`
+- `routes/sitemap.njk` → `/sitemap` with response header `content-type: text/html`
+- `routes/sitemap.xml.njk` → `/sitemap.xml` with response header `content-type: application/xml`
 
 
 ## The route object

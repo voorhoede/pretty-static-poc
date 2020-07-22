@@ -1,0 +1,10 @@
+query {
+  cases: allCaseItems(locale: en, first: 100) {
+    slug
+    updatedAt
+  }
+  posts: allBlogPosts(locale: en, first: 100, orderBy: publishDate_DESC) {
+    slug
+    updatedAt
+  }
+}

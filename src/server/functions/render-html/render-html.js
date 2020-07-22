@@ -17,7 +17,7 @@ const pageNotFound = () => ({
     statusCode: 404,
     headers: { 'content-type': 'text/html' },
     //body: render(`404`, { _data: {}, _route: {} }),
-    body: '404',
+    body: '<h1>404</h1>',
 });
 const serverError = (error) => ({
     statusCode: 500,
@@ -28,17 +28,16 @@ const serverError = (error) => ({
 });
 
 const handler = async (event) => {
-    const route = {
-        ...await matchRoute(event.path),
-        queryParams: event.queryStringParameters,
-        host: event.headers.host,
-    };
-    // console.log({ route })
-    if (!route.isMatch) return pageNotFound();
-
     try {
+        const route = await matchRoute({
+            urlPath: event.path,
+            queryParams: event.queryStringParameters
+        });
+        // console.log({ route })
+        if (!route.isMatch) return pageNotFound();
+
         const data = await loadData({ route });
-        const html = render(route.name, { ...data, _data: data, _route: route });
+        const html = await render(route.name, { ...data, _data: data, _route: route, _params: route.params });
         const contentType = mime.lookup(route.urlPath) || 'text/html';
         return {
             statusCode: 200,

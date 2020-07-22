@@ -1,8 +1,8 @@
 const nunjucks = require('nunjucks');
-const { clientDir, templateExt } = require('./paths');
-const { reverseRoute } = require('./router');
-const assetUrl = require('./asset-url');
-const stringifyProps = require('./stringify-props');
+const { clientDir, templateExt } = require('../paths');
+const { reverseRoute } = require('../router');
+const assetUrl = require('./filters/asset-url');
+const stringifyProps = require('./filters/stringify-props');
 
 require('dotenv').config();
 
@@ -37,7 +37,11 @@ function createEnv() {
 
 function render(filename, data) {
     const env = createEnv();
-    return env.render(`pages/${filename}${templateExt}`, data);
+    return new Promise((resolve, reject) => {
+        env.render(`routes/${filename}${templateExt}`, data, (err, result) => {
+            err ? reject(err) : resolve(result);
+        });
+    });
 }
 
 module.exports = {

@@ -1,10 +1,21 @@
 # Data
 
+You add data to your project by adding data files.
+A data file has a `*.data.(js|json|grapqhl|...)` extension.
+
+Data is loaded using extension specific data loaders.
+The data loaders have access to the [route](/docs/routing.md) `params`,
+so you can dynamically return data.
+
+Data is available in your templates, as well as via the `/api/data/:route(.json)` URL endpoint.
+
+
 ## Features
 
 - [x] File based data loading
 - [x] Serverless data loading
-- [ ] Global data (files)
+- [ ] Static generated data files
+- [ ] Global data (files)?
 - [ ] Caching (during development)
 - [ ] Template helper for data loading
 - [x] JavaScript data loader
@@ -14,13 +25,64 @@
 
 ## File based data loading
 
-To load data in a template, simply add a `.data.extension` file next to the template file:
+To load data in a template, simply add a data file with the same basename next to the template file:
 
 ```
-src/pages/
+routes/
   my-page.njk
-  my-page.data.graphql
+  my-page.data.(js|json|graphql)
 ```
+
+For example `my-page.data.json`:
+
+```json
+{
+  "title": "My page",
+  "description": "is defined in a data file"
+}
+```
+
+Loads `title` and `description` into the template:
+
+```njk
+<h1>{{ title }}</h1>
+<p>{{ description }}</p>
+```
+
+## Serverless data loading
+
+All data files are also available via the `/api/data/:route` URL endpoint.
+
+The `routes/my-page.data.json` example above, is available via `/api/data/my-page/` and will return:
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "title": "My page",
+    "description": "is defined in a data file"
+  }
+}
+```
+
+In fact, you can create any API endpoint you want. It doesn't need to have a related template file.
+
+For example you can create a weather API endpoint in `routes/weather.data.js`:
+
+```js
+// routes/weather.data.js
+const fetch = require('node-fetch');
+const openWeatherUrl = 'api.openweathermap.org/data/2.5/weather';
+const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
+
+module.exports = async function({ params }) {
+  const { city, country } = params;
+  return fetch(`${openWeatherApiKey}?q=${city},${country}&appid=${openWeatherApiKey}`)
+    .then(response => response.json());
+}
+```
+
+You can call this API endpoint via `/api/data/weather?city=Amsterdam&country=NL`.
 
 ## Available data loaders
 
@@ -29,6 +91,7 @@ src/pages/
 - [x] `.data.graphql`: GraphQL data loader
 - [ ] `.data.yaml`: YAML data loader
 - [ ] `.data.toml`: TOML data loader
+- [ ] `.data.json5`: JSON5 data loader
 - [ ] `.data.md`: Markdown data loader
 
 ### JavaScript Data Loader

@@ -1,11 +1,10 @@
 const path = require('path');
 
 const clientDir = path.dirname(require.resolve('client/package.json'));
-const pagesDir = path.join(clientDir, 'pages/');
+const routesDir = path.join(clientDir, 'routes/');
 
 module.exports = {
     clientDir,
-    pagesDir,
+    routesDir,
     templateExt: '.njk',
-    graphqlQueryExt: '.data.graphql',
 }

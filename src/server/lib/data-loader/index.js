@@ -3,7 +3,7 @@ const path = require('path');
 const graphqlLoader = require('./graphql-loader');
 const jsLoader = require('./javascript-loader');
 const jsonLoader = require('./json-loader');
-const { pagesDir } = require('../paths');
+const { routesDir } = require('../paths');
 
 const loaders = [
     {
@@ -24,7 +24,7 @@ const loaders = [
 ];
 
 async function getDataFiles(routeName) {
-    const dirname = path.dirname(path.join(pagesDir, `${routeName}`));
+    const dirname = path.dirname(path.join(routesDir, `${routeName}`));
     const basename = `${path.basename(routeName)}.data.`;
     const filenames = await fs.readdir(dirname);
     return filenames
@@ -56,9 +56,7 @@ async function loadData({ route }) {
     };
 
     const { filename } = dataFiles.find(dataFile => loader.extensions.includes(dataFile.extension))
-    const params = {  ...route.queryParams, ...route.params };
-    const data = await loader.loadData({ filename, params });
-    return data;
+    return await loader.loadData({ filename, params: route.params });
 }
 
 module.exports = {

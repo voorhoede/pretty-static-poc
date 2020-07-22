@@ -1,9 +1,9 @@
 const glob = require('fast-glob');
 const Route = require('route-parser');
-const { pagesDir, templateExt } = require('./paths');
+const { routesDir, templateExt } = require('./paths');
 
 async function getBasenames() {
-    const templateNames = await glob(`**/*${templateExt}`, { cwd: pagesDir })
+    const templateNames = await glob(`**/*${templateExt}`, { cwd: routesDir })
     return templateNames.map(name => name.substr(0, name.length - templateExt.length));
 }
 
@@ -52,18 +52,22 @@ function matchParams({ params, patterns }) {
     });
 }
 
-async function matchRoute(urlPath) {
+async function matchRoute({ urlPath, queryParams = {} }) {
     const routes = await getRoutes();
     return routes
         .map(route => {
             const output = (new Route(route.pattern)).match(urlPath);
             const isMatch = output && matchParams({ params: output, patterns: route.paramPatterns });
+            const pathParams = output ? output : {};
+            const params = { ...queryParams, ...pathParams };
             return {
                 ...route,
                 urlPath,
                 isMatch,
-                params: output ? output : {}
-            }
+                params,
+                pathParams,
+                queryParams,
+            };
         })
         .find(route => route.isMatch);
 }
