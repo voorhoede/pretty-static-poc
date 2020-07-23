@@ -8,6 +8,7 @@ const validator = require('@middy/validator');
 const { loadData } = require('lib/data-loader');
 const { render } = require('lib/renderer');
 const { matchRoute } = require('lib/router');
+const serverTimer = require('lib/server-timer');
 const { inputSchema, outputSchema } = require('./schema');
 
 require('dotenv').config();
@@ -24,24 +25,33 @@ const serverError = (error) => ({
     headers: { 'content-type': 'text/html' },
     body: isProduction
         ? 'Server Error (500)'
-        : `<h1>Server Error (500)</h1><pre><code>${JSON.stringify({ statusCode: 500, error }, null, 2)}</code></pre>`,
+        : `<h1>Server Error (500)</h1><pre><code>${JSON.stringify({ statusCode: 500, error }, null, 2)}</code></pre>`, // @todo: display stack trace
 });
 
 const handler = async (event) => {
     try {
-        const route = await matchRoute({
+        const { withTiming, timingsToString } = serverTimer('Request (total)');
+
+        const route = await withTiming('Routing', matchRoute({
             urlPath: event.path,
             queryParams: event.queryStringParameters
-        });
-        // console.log({ route })
+        }));
         if (!route.isMatch) return pageNotFound();
 
-        const data = await loadData({ route });
-        const html = await render(route.name, { ...data, _data: data, _route: route, _params: route.params });
+        const data = await withTiming('Load data', loadData({ route }));
+        const html = await withTiming('Rendering', render(route.name, { 
+            ...data, 
+            _data: data, 
+            _route: route, 
+            _params: route.params
+        }));
         const contentType = mime.lookup(route.urlPath) || 'text/html';
         return {
             statusCode: 200,
-            headers: { 'content-type': contentType },
+            headers: { 
+                'Content-Type': contentType,
+                'Server-Timing': timingsToString(),
+            },
             body: html,
         };
     } catch(error) {

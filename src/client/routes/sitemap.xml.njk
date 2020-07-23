@@ -1,8 +1,3 @@
-{%- macro lastmod(utcDate) %}
-  {# quick and dirty date formatting #}
-  <lastmod>{{ utcDate | truncate(10, true, '') }}</lastmod>
-{% endmacro -%}
-
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -11,13 +6,13 @@
   {%- for item in cases %}
   <url>
     <loc>{{ route('_locale/cases/_slug', { locale: 'en', slug: item.slug }) }}</loc>
-    {{ lastmod(item.updatedAt) }}
+    <lastmod>{{ item.updatedAt }}</lastmod>
   </url>
   {%- endfor %}
   {%- for item in posts %}
   <url>
     <loc>{{ route('blog/_slug', { slug: item.slug }) }}</loc>
-    {{ lastmod(item.updatedAt) }}
+    <lastmod>{{ item.updatedAt }}</lastmod>
   </url>
   {%- endfor %}
 </urlset>

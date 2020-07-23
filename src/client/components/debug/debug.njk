@@ -1,4 +1,5 @@
 <script>
+console.log('debug::_env', {{ _env | dump(2) | safe }});
 console.log('debug::_route', {{ _route | dump(2) | safe }});
 console.log('debug::_params', {{ _params | dump(2) | safe }});
 console.log('debug::_data', {{ _data | dump(2) | safe }});

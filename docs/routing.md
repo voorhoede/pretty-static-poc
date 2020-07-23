@@ -3,12 +3,14 @@
 ## Features
 
 - [x] File based router
-- [x] Static routes
-- [x] Dynamic routes
-- [x] Query parameters
-- [x] Route expressions
+- [x] Static routes (`routes/page.njk`)
+- [x] Dynamic routes (`routes/_param.njk`)
+- [x] Query parameters (`?paramQ=...`)
+- [x] Route expressions (`_slug([a-z]+).njk`)
 - [ ] Splat / wildcard routes (`_*.njk`)
 - [x] Custom file extensions (`*.xml.njk`)
+- [ ] Computed parameters (`*.params.js`)
+- [ ] Parameter validation (`*.params.js`)
 - [x] Routes in templates (`route()`)
 - [ ] Optional absolute route (`route(..., params, { absolute: true })`)
 - [ ] Optional prefetching route (`route(..., params, { prefetch: true })`)
@@ -69,6 +71,32 @@ When you add a file extension (like `.xml`) the server reponds with the related 
 
 - `routes/sitemap.njk` → `/sitemap` with response header `content-type: text/html`
 - `routes/sitemap.xml.njk` → `/sitemap.xml` with response header `content-type: application/xml`
+
+### Computed parameters
+
+```js
+// routes/blog/_page.params.js
+const limit = 5;
+module.exports = {
+  computed(params) {
+    return {
+      limit,
+      offset: params.page * limit,
+    };
+  }
+};
+```
+
+### Parameter validation
+
+```js
+// routes/blog/_page.params.js
+module.exports = {
+  validate(params) {
+    return parseInt(params.page, 10) > 0;
+  }
+};
+```
 
 
 ## The route object

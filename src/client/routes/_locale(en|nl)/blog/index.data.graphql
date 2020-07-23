@@ -1,0 +1,13 @@
+query ($locale: SiteLocale, $offset: IntType = 0, $limit: IntType = 10) {
+  items: allBlogPosts(locale: $locale, orderBy: publishDate_DESC, skip: $offset, first: $limit) {
+    slug
+    title
+    publishDate
+    authors {
+      name
+    }
+  }
+  meta: _allBlogPostsMeta {
+    count
+  }
+}

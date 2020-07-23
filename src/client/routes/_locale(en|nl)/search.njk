@@ -1,7 +1,9 @@
 {% extends "layouts/default.njk" %}
+{% from "components/pagination/pagination.njk" import pagination %}
 
 {% set query = _params.query %}
-{% set offset = _params.offset | default(0) %}
+{% set limit = _params.limit | default(10) | int %}
+{% set offset = _params.offset | default(0) | int %}
 
 {% block main %}
     <h1>Search ({{ locale }})</h1>
@@ -9,12 +11,13 @@
     <form action="{{ route('_locale/search', { locale: _route.params.locale }) }}" method="get">
         <label for="search-input">search for</label>
         <input id="search-input" type="search" name="query" value="{{ query }}">
+        <button type="submit">search</button>
     </form>
 
     {% if query %}
     <h2>Results</h2>
     <p>Found <strong>{{ count }} result(s)</strong> for "<strong>{{ query }}</strong>" in total.</p>
-    <ol start="{{ 1* offset + 1 }}">
+    <ol start="{{ offset + 1 }}">
         {% for item in results %}
         <li>
             <a href="{{ item.urlPath }}">
@@ -26,5 +29,6 @@
         </li>
         {% endfor %}
     </ol>
+    {# {{ pagination('_locale/search', count = count, limit = limit, offset = offset) }} #}
     {% endif %}
 {% endblock %}

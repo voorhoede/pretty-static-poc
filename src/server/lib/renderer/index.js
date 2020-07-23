@@ -1,8 +1,10 @@
 const nunjucks = require('nunjucks');
 const { clientDir, templateExt } = require('../paths');
 const { reverseRoute } = require('../router');
-const assetUrl = require('./filters/asset-url');
-const stringifyProps = require('./filters/stringify-props');
+const assetUrlFilter = require('./filters/asset-url');
+const formatDateTimeFilter = require('./filters/format-date-time');
+const loadDataFilter = require('./filters/load-data');
+const stringifyPropsFilter = require('./filters/stringify-props');
 
 require('dotenv').config();
 
@@ -21,10 +23,12 @@ function createEnv() {
     });
     let state = defaultState();
 
-    // @todo configure env using nunjucks.config.js in project root
-    env.addGlobal('assetUrl', assetUrl);
-    env.addGlobal('className', stringifyProps);
-    env.addGlobal('stringifyProps', stringifyProps);
+    // @todo configure env using nunjucks.config.js in project root?
+    env.addFilter('formatDateTime', formatDateTimeFilter);
+    env.addFilter('loadData', loadDataFilter, true);
+    env.addGlobal('assetUrl', assetUrlFilter);
+    env.addGlobal('className', stringifyPropsFilter);
+    env.addGlobal('stringifyProps', stringifyPropsFilter);
     env.addGlobal('route', (name, params) => reverseRoute({ name, params }));
     env.addGlobal('isFirstTime', (key) => {
         if (state.firstTimers.includes(key)) return false;
@@ -37,8 +41,13 @@ function createEnv() {
 
 function render(filename, data) {
     const env = createEnv();
+    const _env = {
+        appEnv: 'server',
+        createdAt: new Date(),
+        debug: true,
+    }
     return new Promise((resolve, reject) => {
-        env.render(`routes/${filename}${templateExt}`, data, (err, result) => {
+        env.render(`routes/${filename}${templateExt}`, { ...data, _env }, (err, result) => {
             err ? reject(err) : resolve(result);
         });
     });

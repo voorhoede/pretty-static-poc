@@ -3,47 +3,40 @@
 **Pretty Static is a lightweight serverless web app framework optimised for mostly static sites,**
 **with optional dynamic serverless rendering and data loading.**
 
+> **Status: working proof-of-concept**
+>
+> Try it using `npx degit voorhoede/pretty-static`
+
 Pretty Static draws inspiration from other web app frameworks like Next.js, Nuxt.js, Sapper and Eleventy.
 The setup is similar but without a JavaScript or Single Page App framework. That makes it ideal for mostly static sites.
-You can generate fully static sites. And ig you need dynamic rendering and data loading, Pretty offers this using serverless functions.
+You can generate fully static sites. And if you need dynamic rendering and an API for your data, Pretty offers this using serverless functions.
 
 ## Features
 
-* Static site generation
-* Dynamic server-side rendering
-* File based routing
-* GraphQL data fetching built-in
+* Full static site generation (no client-side JS)
+* Optional dynamic rendering using cloud functions
+* Powerful templating syntax using Nunjucks with extra helpers
+* File-system based routing for pages and data
+* Built-in data loaders for JSON, GraphQL and JS
+* Optional dynamic data API using cloud functions
+* Asset optimisation and caching
 
 ## Roadmap
 
-* Asset optimisation and caching
-* I18n
-* Custom data fetching optional
+* [ ] Add your own data loaders
+* [ ] I18n support
+* [ ] Dynamic rendering client-side
+* [ ] Dynamic rendering in Service Worker
 
-## Getting started
+## Documentation
 
-* [Routing](docs/routing.md) - file-system based router supporting dynamic routes.
-* [Templates](docs/templates.md) - 
-* [Data](docs/data.md) -
-* [Assets](docs/assets.md) - 
-* [Server](docs/server.md) - 
+* [Getting started](docs/getting-started.md): learn how-to build a web site step-by-step.
+* [Routing](docs/routing.md): file-system based router supporting dynamic routes.
+* [Templates](docs/templates.md): 
+* [Data](docs/data.md): 
+* [Assets](docs/assets.md): 
+* [Server](docs/server.md): 
 
-## Structure
+## License
 
-```
-src/          <- web app source code
-  client/     <- templates and other files sent to the browser
-  lib/        <- shared between client & server
-  server/     <- server config & serverless functions
-```
-
-## The client
-
-```
-src/client/
-  assets/           <- will be optimised + hash in filename
-  components/       <-
-  layouts/          <-
-  routes/            <-
-  static/           <- will be served as-is
-```
+[MIT Licensed](license) by [De Voorhoede](https://www.voorhoede.nl)

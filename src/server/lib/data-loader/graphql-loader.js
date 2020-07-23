@@ -3,15 +3,15 @@ const fetch = require('node-fetch');
 
 require('dotenv').config();
 
-module.exports = async function({ filename, params }) {
+module.exports = async function({ config, filename, params }) {
     const query = await fs.readFile(filename, 'utf8');
     const variables = params;
 
-    const data = await fetch('https://graphql.datocms.com/', {
+    const data = await fetch(config.url, {
         method: 'post',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': process.env.DATO_API_TOKEN,
+            ...config.headers,
         },
         body: JSON.stringify({ query, variables }),
     })

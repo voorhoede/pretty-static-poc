@@ -54,7 +54,7 @@ function matchParams({ params, patterns }) {
 
 async function matchRoute({ urlPath, queryParams = {} }) {
     const routes = await getRoutes();
-    return routes
+    const route = routes
         .map(route => {
             const output = (new Route(route.pattern)).match(urlPath);
             const isMatch = output && matchParams({ params: output, patterns: route.paramPatterns });
@@ -70,6 +70,13 @@ async function matchRoute({ urlPath, queryParams = {} }) {
             };
         })
         .find(route => route.isMatch);
+    if (!route) {
+        return {
+            urlPath,
+            isMatch: false,
+        }
+    }
+    return route;
 }
 
 function reverseRoute({ name, params = {} }) {

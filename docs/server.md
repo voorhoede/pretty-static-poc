@@ -5,7 +5,8 @@
 - [ ] Static assets
 - [ ] Serverless functions
 - [ ] Headers & redirects
-- [ ] Performance & timings
+- [ ] Performance
+- [x] Server timings (https://w3c.github.io/server-timing)
 - [ ] Pretty Static on Netlify
 - [ ] Pretty Static on Vercel Now
 - [ ] Pretty Static on ...

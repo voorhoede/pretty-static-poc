@@ -1,0 +1,7 @@
+.pagination__list {
+    list-style: none;
+}
+
+.pagination__item {
+    display: inline-block;
+}

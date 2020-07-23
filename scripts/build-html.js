@@ -21,13 +21,13 @@ function asyncSequence(arr, asyncMethod) {
 // @todo: throw error if response.status != 200
 function renderAndSave({ name, params }) {
     const urlPath = reverseRoute({ name, params });
-    const outputFilename = path.join(__dirname, '../dist', urlPath, 'index.html');
+    const outputFilename = path.join(__dirname, '../dist', urlPath, 'index.html'); // @todo: support non-html filetypes
     return renderHtml({
             httpMethod: 'GET',
             path: urlPath,
             headers: {},
         })
-        .then(response => fse.outputFile(outputFilename, response.body))
+        .then(response => fse.outputFile(outputFilename, response.body)) // @todo: throw error if status !== 200
         .then(() => log(`✓ Generated ${urlPath}`));
 }
 

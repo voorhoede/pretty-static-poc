@@ -1,7 +1,7 @@
 {% macro appHeader(activeRoute) %}
 {% set items = [
     { route: '_locale/cases/index', text: 'Cases' },
-    { route: 'blog/index', text: 'Blog' },
+    { route: '_locale/blog/index', text: 'Blog' },
     { route: '_locale/search', text: 'Search' }
 ] %}
 {% if isFirstTime('app-header.css') %}

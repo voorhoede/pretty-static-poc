@@ -1,0 +1,28 @@
+{% extends "layouts/default.njk" %}
+{% from "components/pagination/pagination.njk" import pagination %}
+
+{% set locale = _params.locale %}
+{% set limit = _params.limit | default(10) | int %}
+{% set offset = _params.offset | default(0) | int %}
+
+{% block main %}
+    <h1>Blog</h1>
+    <ol start="{{ offset + 1 }}">
+        {% for item in items %}
+        <li>
+            <a href="{{ route('_locale/blog/_slug', { locale: locale, slug: item.slug }) }}">
+                <h2>{{ item.title }}</h2>
+                <p>
+                    <time datetime="{{ item.publishDate }}">
+                        {{ item.publishDate | formatDateTime(locale, { day: 'numeric', month: 'long', year: 'numeric' }) }}
+                    </time>
+                    by {% for author in item.authors %}{{ ', ' if not loop.first }}{{ author.name }}{% endfor %}
+                </p>
+            </a>
+        </li>
+        {% endfor %}
+    </ol>
+
+    {{ pagination('_locale/blog/index', count = meta.count, limit = limit, offset = offset) }}
+    showing {{ limit }} posts of {{ meta.count }} total.
+{% endblock %}

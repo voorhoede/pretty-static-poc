@@ -1,9 +1,0 @@
-query ($offset: IntType = 0, $limit: IntType = 100) {
-  items: allBlogPosts(orderBy: publishDate_DESC, skip: $offset, first: $limit) {
-    slug
-    title
-  }
-  meta: _allBlogPostsMeta {
-    count
-  }
-}

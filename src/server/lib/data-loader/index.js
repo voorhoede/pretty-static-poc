@@ -10,16 +10,24 @@ const loaders = [
         name: 'javascript',
         extensions: ['js', 'cjs'],
         loadData: jsLoader,
+        config: {},
     },
     {
         name: 'json',
         extensions: ['json'],
         loadData: jsonLoader,
+        config: {},
     },
     {
         name: 'graphql',
         extensions: ['graphql', 'gql'],
         loadData: graphqlLoader,
+        config: {
+            url: 'https://graphql.datocms.com/',
+            headers: {
+                'Authorization': process.env.DATO_API_TOKEN,
+            },
+        },
     },
 ];
 
@@ -56,7 +64,7 @@ async function loadData({ route }) {
     };
 
     const { filename } = dataFiles.find(dataFile => loader.extensions.includes(dataFile.extension))
-    return await loader.loadData({ filename, params: route.params });
+    return await loader.loadData({ config: loader.config, filename, params: route.params });
 }
 
 module.exports = {

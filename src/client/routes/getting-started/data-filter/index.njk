@@ -1,0 +1,7 @@
+{% set data = 'blog/_slug' | loadData({ slug: 'faster-nuxt-sites-on-netlify' }) %}
+{% set item = data.blogPost %}
+
+{% block main %}
+    <h1>Using data filter</h1>
+    {{ item.title }}
+{% endblock %}

@@ -6,14 +6,15 @@ const validator = require('@middy/validator');
 
 const { loadData } = require('lib/data-loader');
 const { matchRoute } = require('lib/router');
+const serverTimer = require('lib/server-timer');
 const { inputSchema, outputSchema } = require('./schema');
 
 require('dotenv').config();
 
 const isProduction = (process.env.NODE_ENV === 'production');
-const jsonResponse = ({ body, statusCode = 200 }) => ({
+const jsonResponse = ({ body, headers, statusCode = 200 }) => ({
     statusCode,
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...headers },
     body: JSON.stringify({ ...body, statusCode }),
 });
 const pageNotFound = () => jsonResponse({
@@ -30,18 +31,22 @@ const urlPrefix = '/api/data/'; // must match redirect rule in `netlify.toml`
 
 const handler = async (event) => {
     try {
+        const { withTiming, timingsToString } = serverTimer('Request (total)');
         const urlPath = event.path
             .substr(urlPrefix.length -1)
             .replace(/\.json$/, '');
-        const route = await matchRoute({
+        const route = await withTiming('Routing', matchRoute({
             urlPath,
             queryParams: event.queryStringParameters,
-        });
+        }));
         if (!route.isMatch) return pageNotFound();
 
-        const data = await loadData({ route }) || {};
+        const data = await withTiming('Load data', loadData({ route })) || {};
         return jsonResponse({
             body: { data },
+            headers: {
+                'Server-Timing': timingsToString(),
+            }
         });
     } catch(error) {
         console.error(error);
