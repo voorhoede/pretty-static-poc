@@ -7,6 +7,7 @@ const log = message => console.log(message);
 
 const routes = [
     { name: 'index' },
+    { name: 'sitemap.xml' },
     { name: '_locale/cases/index', params: { locale: 'en' } },
     { name: '_locale/cases/_slug', params: { locale: 'en', slug: 'quantum-inspire' } },
 ];
@@ -19,16 +20,23 @@ function asyncSequence(arr, asyncMethod) {
 }
 
 // @todo: throw error if response.status != 200
-function renderAndSave({ name, params }) {
+async function renderAndSave({ name, params }) {
     const urlPath = reverseRoute({ name, params });
-    const outputFilename = path.join(__dirname, '../dist', urlPath, 'index.html'); // @todo: support non-html filetypes
-    return renderHtml({
-            httpMethod: 'GET',
-            path: urlPath,
-            headers: {},
-        })
-        .then(response => fse.outputFile(outputFilename, response.body)) // @todo: throw error if status !== 200
-        .then(() => log(`✓ Generated ${urlPath}`));
+    const { statusCode, body, headers } = await renderHtml({
+        httpMethod: 'GET',
+        path: urlPath,
+        headers: {},
+    });
+    if (statusCode !== 200) {
+        throw new Error(`Invalid response for ${urlPath}`);
+    }
+    const isHtml = (headers['Content-Type'] === 'text/html');
+    const filename = isHtml
+        ? `${urlPath}index.html`
+        : urlPath.replace(/\/$/, '');
+    const outputFilename = path.join(__dirname, '../dist', filename);
+    await fse.outputFile(outputFilename, body);
+    log(`✓ Generated ${filename}`);
 }
 
 log(`\nⓘ Generating static pages\n`);

@@ -17,15 +17,18 @@ function asyncSequence(arr, asyncMethod) {
 }
 
 // @todo: throw error if response.status != 200
-function renderAndSave(url) {
+async function renderAndSave(url) {
     const outputFilename = path.join(__dirname, '../dist/_pretty/data', url);
-    return loadData({
-            httpMethod: 'GET',
-            path: `/api/data${url}`,
-            headers: {},
-        })
-        .then(response => fse.outputFile(outputFilename, response.body))
-        .then(() => log(`✓ Generated ${url}`));
+    const { body, statusCode } = await loadData({
+        httpMethod: 'GET',
+        path: `/api/data${url}`,
+        headers: {},
+    });
+    if (statusCode !== 200) {
+        throw new Error(`Invalid response for ${urlPath}`);
+    }
+    await fse.outputFile(outputFilename, body);
+    log(`✓ Generated ${url}`);
 }
 
 log(`\nⓘ Generating data files\n`);
