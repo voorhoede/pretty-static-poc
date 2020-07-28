@@ -1,8 +1,12 @@
 {
     "name": "lib",
     "version": "1.0.0",
-    "description": "",
+    "description": "Shared server-side utilities",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/voorhoede/pretty-static.git"
+    },
     "dependencies": {
         "fast-glob": "^3.2.4",
         "node-fetch": "^2.6.0",

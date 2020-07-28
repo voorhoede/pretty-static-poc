@@ -1,10 +1,14 @@
 {
   "name": "pretty-static",
+  "description": "lightweight serverless web app framework optimised for mostly static sites",
   "private": true,
   "version": "1.0.0",
-  "description": "",
   "author": "De Voorhoede (https://www.voorhoede.nl)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voorhoede/pretty-static.git"
+  },
   "scripts": {
     "postinstall": "npm run functions:install",
     "assets": "cp -r src/client/assets/ dist/assets/",
