@@ -1,0 +1,29 @@
+<h1>Client</h1>
+<img alt="" 
+    src="{{ assetUrl('logo.png') }}" 
+    style="height:2em; vertical-align:middle;" 
+>
+{% if timestamp %}
+<p>{{ timestamp | formatDateTime('en', { hour: 'numeric', minute: 'numeric', second: 'numeric' }) }}<p>
+{% else %}
+<p>server rendered</p>
+{% endif %}
+
+{% set lazyData = 'examples/lazy' | loadData() %}
+<p>lazy data: {{ lazyData | dump(2) }}</p>
+
+<!-- @todo: render in worker -->
+<script src="/_pretty/nunjucks-slim.min.js"></script>
+<script src="/_pretty/templates.js"></script>
+<script src="/_pretty/client.js"></script>
+<script>
+(function(){
+    setInterval(() => {
+        $pretty.render('routes/examples/client.njk', {
+            timestamp: new Date(),
+        })
+        .then(html => document.body.innerHTML = html)
+        .catch(err => console.error('render error', err));
+    }, 1000);
+}());
+</script>

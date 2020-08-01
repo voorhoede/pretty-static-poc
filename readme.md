@@ -9,7 +9,7 @@
 
 Pretty Static draws inspiration from other web app frameworks like Next.js, Nuxt.js, Sapper and Eleventy.
 The setup is similar but without a JavaScript or Single Page App framework. That makes it ideal for mostly static sites.
-You can generate fully static sites. And if you need dynamic rendering and an API for your data, Pretty offers this using serverless functions.
+You can generate fully static sites (with 0kb client-side JS). And if you need dynamic rendering and an API for your data, Pretty offers this using serverless functions.
 
 ## Features
 

@@ -15,6 +15,7 @@
     "postassets": "node scripts/revision-assets.js",
     "prebuild": "rimraf dist/",
     "build": "NODE_ENV=production run-s build:*",
+    "build:client": "node scripts/build-client.js",
     "build:data": "node scripts/build-data.js",
     "build:html": "node scripts/build-html.js",
     "build:static": "cp -r src/client/static/ dist/",
@@ -26,13 +27,17 @@
     "watch": "echo 'todo'"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^14.0.0",
     "fast-glob": "^3.2.4",
     "fs-extra": "^9.0.1",
     "netlify-cli": "^2.58.0",
     "npm-run-all": "^4.1.5",
+    "nunjucks": "^3.2.2",
+    "promise.series": "^0.2.0",
     "recursive-install": "^1.4.0",
     "rev-hash": "^3.0.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "rollup": "^2.23.0"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
